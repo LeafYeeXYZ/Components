@@ -1,5 +1,7 @@
-import { type IUI, Leafer, Rect } from 'leafer'
+import { Canvas, Rect } from '@antv/g'
 import { useEffect, useRef } from 'react'
+import { renderer } from '../lib/antv'
+import { debounce } from '../lib/utils'
 
 type LightProps = {
 	/** default: rgb(255,0,20) */
@@ -27,44 +29,56 @@ export function Light({
 			return
 		}
 
-		const leafer = new Leafer({
-			view: containerRef.current,
-			fill: '#ffffff',
+		const canvas = new Canvas({
+			container: containerRef.current,
+			renderer,
+			width: 0,
+			height: 0,
 		})
 
-		const draw: (app: Leafer) => void = (app) => {
-			app.clear()
-			const w = app.width
-			const h = app.height
-			if (!w || !h) {
+		const draw = () => {
+			if (!containerRef.current) {
 				return
 			}
-			const items: IUI[] = []
+			canvas.resize(
+				containerRef.current.clientWidth,
+				containerRef.current.clientHeight,
+			)
+			canvas.destroyChildren()
+			const w = containerRef.current.clientWidth
+			const h = containerRef.current.clientHeight
+			const items: Rect[] = []
 			const widthStep = (w - w * minShapeWidth) / (shapeCount - 1) / 2
 			const heightStep = (h - h * minShapeHeight) / (shapeCount - 1) / 2
 			for (let i = 1; i <= shapeCount; i++) {
 				const x = (i - 1) * widthStep
 				const y = (i - 1) * heightStep
 				const rect = new Rect({
-					x,
-					y,
-					width: w - 2 * x,
-					height: h - 2 * y,
-					fill: shapeColor,
-					opacity: shapeOpacity,
+					style: {
+						x,
+						y,
+						width: w - 2 * x,
+						height: h - 2 * y,
+						fill: shapeColor,
+						opacity: shapeOpacity,
+					},
 				})
 				items.push(rect)
 			}
-			app.add(items)
+			canvas.ready.then(() => {
+				for (const item of items) {
+					canvas.appendChild(item)
+				}
+			})
 		}
 
-		leafer.on('resize', () => {
-			draw(leafer)
-		})
-		draw(leafer)
+		draw()
 
+		const debouncedDraw = debounce(draw)
+		window.addEventListener('resize', debouncedDraw)
 		return () => {
-			leafer.destroy()
+			window.removeEventListener('resize', debouncedDraw)
+			canvas.destroy()
 		}
 	}, [shapeColor, shapeCount, shapeOpacity, minShapeWidth, minShapeHeight])
 

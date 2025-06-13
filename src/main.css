@@ -3,3 +3,9 @@
 .ant-modal-content {
 	@apply !rounded-none !border !border-gray-600;
 }
+.ant-modal-close {
+	@apply !hidden;
+}
+.ant-modal-header {
+	@apply !mb-0;
+}

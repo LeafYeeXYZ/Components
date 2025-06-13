@@ -1,12 +1,19 @@
-import { ExpandOutlined } from '@ant-design/icons'
+import {
+	CloseOutlined,
+	ExpandOutlined,
+	ReloadOutlined,
+} from '@ant-design/icons'
 import { Button, ColorPicker, Modal } from 'antd'
 import { useState } from 'react'
+import { Balls } from './components/Balls'
 import { Light } from './components/Light'
+import { randomId } from './lib/utils'
 
 export default function App() {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const [modalTitle, setModalTitle] = useState('')
 	const [modalContent, setModalContent] = useState<React.ReactNode>(null)
+	const [modalContentKey, setModalContentKey] = useState(randomId())
 	const onCancelPreview = () => {
 		setIsModalOpen(false)
 		setModalTitle('')
@@ -16,6 +23,9 @@ export default function App() {
 		setModalTitle(title)
 		setModalContent(content)
 		setIsModalOpen(true)
+		setTimeout(() => {
+			setModalContentKey(randomId())
+		}, 0)
 	}
 	const [titleColor, setTitleColor] = useState('#000000')
 
@@ -27,8 +37,8 @@ export default function App() {
 			>
 				Components{' '}
 				<ColorPicker
-				  className='!hidden md:!inline-flex'
-				  defaultFormat='rgb'
+					className='!hidden md:!inline-flex'
+					defaultFormat='rgb'
 					defaultValue={titleColor}
 					onChange={(_, css) => setTitleColor(css)}
 				/>
@@ -37,16 +47,37 @@ export default function App() {
 				<ComponentContainer onOpenPreview={onOpenPreview} title='<Light />'>
 					<Light />
 				</ComponentContainer>
+				<ComponentContainer onOpenPreview={onOpenPreview} title='<Balls />'>
+					<Balls />
+				</ComponentContainer>
 			</div>
 			<Modal
-				title={modalTitle}
+				title={
+					<div className='flex items-center justify-between'>
+						<span className='text-lg font-semibold'>{modalTitle}</span>
+						<div>
+							<Button
+								type='text'
+								icon={<ReloadOutlined />}
+								onClick={() => setModalContentKey(randomId())}
+							/>
+							<Button
+								type='text'
+								icon={<CloseOutlined />}
+								onClick={onCancelPreview}
+							/>
+						</div>
+					</div>
+				}
 				centered
 				open={isModalOpen}
-				onCancel={onCancelPreview}
 				footer={null}
 				className='!w-[1200px] !max-w-[90dvw]'
 			>
-				<div className='w-full h-[800px] max-h-[calc(90dvh-8rem)] relative mt-6 border border-gray-600'>
+				<div
+					key={modalContentKey}
+					className='w-full h-[800px] max-h-[calc(90dvh-8rem)] relative mt-6 border border-gray-600'
+				>
 					{modalContent}
 				</div>
 			</Modal>
@@ -63,19 +94,29 @@ function ComponentContainer({
 	onOpenPreview: (title: string, content: React.ReactNode) => void
 	title: string
 }) {
+	const [key, setKey] = useState(randomId())
 	return (
 		<div className='w-full h-[300px] border overflow-hidden border-gray-600'>
 			<div className='w-full h-[40px]'>
 				<div className='flex items-center justify-between pl-3 pr-2 h-full border-b border-gray-600'>
 					<span className='font-semibold'>{title}</span>
-					<Button
-						type='text'
-						icon={<ExpandOutlined />}
-						onClick={() => onOpenPreview(title, children)}
-					/>
+					<div>
+						<Button
+							type='text'
+							icon={<ReloadOutlined />}
+							onClick={() => setKey(randomId())}
+						/>
+						<Button
+							type='text'
+							icon={<ExpandOutlined />}
+							onClick={() => onOpenPreview(title, children)}
+						/>
+					</div>
 				</div>
 			</div>
-			<div className='w-full h-[calc(100%-40px)] relative'>{children}</div>
+			<div key={key} className='w-full h-[calc(100%-40px)] relative'>
+				{children}
+			</div>
 		</div>
 	)
 }

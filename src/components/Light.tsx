@@ -1,7 +1,9 @@
 import { Canvas, Rect } from '@antv/g'
+import { Renderer } from '@antv/g-canvas'
 import { useEffect, useRef } from 'react'
-import { renderer } from '../lib/antv'
 import { debounce } from '../lib/utils'
+
+const renderer = new Renderer()
 
 type LightProps = {
 	/** default: rgb(255,0,20) */

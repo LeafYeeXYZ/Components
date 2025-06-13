@@ -1,10 +1,12 @@
 import {
 	CloseOutlined,
 	ExpandOutlined,
+	InfoCircleOutlined,
 	ReloadOutlined,
 } from '@ant-design/icons'
-import { Button, ColorPicker, Modal } from 'antd'
+import { Button, ColorPicker, Modal, Popover } from 'antd'
 import { useState } from 'react'
+import { ErrorBoundary, type FallbackProps } from 'react-error-boundary'
 import { Balls } from './components/Balls'
 import { Light } from './components/Light'
 import { randomId } from './lib/utils'
@@ -115,8 +117,23 @@ function ComponentContainer({
 				</div>
 			</div>
 			<div key={key} className='w-full h-[calc(100%-40px)] relative'>
-				{children}
+				<ErrorBoundary FallbackComponent={ErrorFallback}>
+					{children}
+				</ErrorBoundary>
 			</div>
+		</div>
+	)
+}
+
+function ErrorFallback({ error }: FallbackProps) {
+	return (
+		<div className='w-full h-full flex items-center justify-center'>
+			<Popover
+				content={error instanceof Error ? error.message : String(error)}
+				trigger={['hover', 'click']}
+			>
+				<Button type='text' icon={<InfoCircleOutlined />} size='large' danger />
+			</Popover>
 		</div>
 	)
 }

@@ -22,11 +22,13 @@ export default function App() {
 	return (
 		<div className='w-dvw py-12 bg-white'>
 			<div
-				className='w-full text-5xl font-semibold pl-14 mt-8 mb-20'
+				className='w-full text-5xl font-semibold px-14 mt-8 mb-20 text-center md:text-left'
 				style={{ color: titleColor }}
 			>
 				Components{' '}
 				<ColorPicker
+				  className='!hidden md:!inline-flex'
+				  defaultFormat='rgb'
 					defaultValue={titleColor}
 					onChange={(_, css) => setTitleColor(css)}
 				/>

@@ -25,3 +25,8 @@ export function randomId(length = 8): string {
 		.toString(36)
 		.slice(2, length + 2)
 }
+
+export function randomRed(): string {
+	const baseRGB = [255, 0, 20]
+	return `rgb(${Math.max(0, baseRGB[0] - Math.random() * 155).toFixed(0)}, 0, ${Math.min(255, baseRGB[2] + Math.random() * 50).toFixed(0)})`
+}

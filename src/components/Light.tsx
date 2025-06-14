@@ -6,20 +6,18 @@ import { debounce } from '../lib/utils'
 const renderer = new Renderer()
 
 type LightProps = {
-	/** default: rgb(255,0,20) */
-	shapeColor?: `rgb(${number},${number},${number})`
-	/** default: 10 */
+	shapeColor?: string
 	shapeCount?: number
-	/** 0 - 1, default: 0.2 */
+	/** 0 - 1, relative to container width, default: 0.2 */
 	minShapeWidth?: number
-	/** 0 - 1, default: 0.2 */
+	/** 0 - 1, relative to container height, default: 0.2 */
 	minShapeHeight?: number
 	/** 0 - 1, default: 1 / shapeCount */
 	shapeOpacity?: number
 }
 
 export function Light({
-	shapeColor = 'rgb(255,0,20)',
+	shapeColor = `rgb(${255 - Math.floor(Math.random() * 64)}, 0, ${Math.floor(Math.random() * 192)})`,
 	shapeCount = 10,
 	minShapeWidth = 0.2,
 	minShapeHeight = 0.2,

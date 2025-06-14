@@ -9,6 +9,7 @@ import { useState } from 'react'
 import { ErrorBoundary, type FallbackProps } from 'react-error-boundary'
 import { Balls } from './components/Balls'
 import { Light } from './components/Light'
+import { Planets } from './components/Planets'
 import { randomId } from './lib/utils'
 
 export default function App() {
@@ -51,6 +52,9 @@ export default function App() {
 				</ComponentContainer>
 				<ComponentContainer onOpenPreview={onOpenPreview} title='<Balls />'>
 					<Balls />
+				</ComponentContainer>
+				<ComponentContainer onOpenPreview={onOpenPreview} title='<Planets />'>
+					<Planets />
 				</ComponentContainer>
 			</div>
 			<Modal

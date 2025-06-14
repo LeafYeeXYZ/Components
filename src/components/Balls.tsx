@@ -7,12 +7,12 @@ import {
 	World,
 } from 'matter-js'
 import { useEffect, useMemo, useRef } from 'react'
-import { debounce } from '../lib/utils'
+import { debounce, randomRed } from '../lib/utils'
 
 type BallsProps = {
 	/** if space is not enough, some balls may not be rendered, default: 15 */
 	ballsCount?: number
-	/** 0 - 1 means relative to the container width, >= 1 means absolute pixel value, default: 0.05 */
+	/** 0 - 1 means relative to the shorter one of container width and height, >= 1 means absolute pixel value, default: 0.08 */
 	ballsRadius?: number
 	/** density (密度) of the balls, default: 0.1 (kg/m^2) */
 	ballsDensity?: number
@@ -27,21 +27,22 @@ type BallsProps = {
 	/** minimum distance from the walls, default: 15 */
 	safeZone?: number
 	/** style options of balls */
-	ballsStyleOptions?: IBodyRenderOptions
+	ballsStyleOptions?: (ballIndex: number) => IBodyRenderOptions
 }
 
 export function Balls({
 	ballsCount = 15,
-	ballsRadius = 0.05,
+	ballsRadius = 0.08,
 	ballsDensity = 0.1,
 	ballsRestitution = 0.6,
 	ballsAirFriction = 0.01,
 	maxInitialPositionY = 0.6,
 	maxIterationsForPositioning = 100,
 	safeZone = 15,
-	ballsStyleOptions = {
-		opacity: 0.8,
-	},
+	ballsStyleOptions = () => ({
+		fillStyle: randomRed(),
+		opacity: 0.8 - (Math.random() - 0.5) * 0.2,
+	}),
 }: BallsProps) {
 	const containerRef = useRef<HTMLDivElement>(null)
 	const engineRef = useRef<Engine | null>(null)
@@ -82,6 +83,7 @@ export function Balls({
 			const container = containerRef.current
 			const w = container.clientWidth
 			const h = container.clientHeight
+			const min = Math.min(w, h)
 
 			const render = Render.create({
 				element: container,
@@ -112,7 +114,7 @@ export function Balls({
 				render: { fillStyle: 'transparent' },
 			})
 
-			const radius = ballsRadius >= 1 ? ballsRadius : w * ballsRadius
+			const radius = ballsRadius >= 1 ? ballsRadius : min * ballsRadius
 			const minX = Math.max(radius + safeZone, 0)
 			const maxX = Math.min(w - radius - safeZone, w)
 			const minY = Math.max(radius + safeZone, 0)
@@ -143,9 +145,9 @@ export function Balls({
 					j++
 				}
 			}
-			const balls = ballsInitialPositions.map((pos) => {
+			const balls = ballsInitialPositions.map((pos, index) => {
 				return Bodies.circle(pos[0], pos[1], radius, {
-					render: ballsStyleOptions,
+					render: ballsStyleOptions(index),
 					restitution: ballsRestitution,
 					density: ballsDensity,
 					frictionAir: ballsAirFriction,

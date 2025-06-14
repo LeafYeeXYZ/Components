@@ -34,7 +34,7 @@ export default function App() {
 	return (
 		<div className='w-dvw py-12 bg-white'>
 			<div
-				className='w-full text-5xl font-semibold px-14 mt-8 mb-20 text-center md:text-left'
+				className='w-full text-5xl font-semibold px-6 md:px-14 mt-8 mb-20 text-center md:text-left'
 				style={{ color: titleColor }}
 			>
 				Components{' '}
@@ -45,7 +45,7 @@ export default function App() {
 					onChange={(_, css) => setTitleColor(css)}
 				/>
 			</div>
-			<div className='w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 px-12'>
+			<div className='w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 px-6 md:px-12'>
 				<ComponentContainer onOpenPreview={onOpenPreview} title='<Light />'>
 					<Light />
 				</ComponentContainer>

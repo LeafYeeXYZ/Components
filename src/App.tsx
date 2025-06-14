@@ -3,7 +3,6 @@ import { Button, ColorPicker, Modal } from 'antd'
 import { useState } from 'react'
 import { ComponentContainer } from './Container'
 import { Balls } from './components/Balls'
-import { City } from './components/City'
 import { Light } from './components/Light'
 import { Planets } from './components/Planets'
 import { randomId } from './lib/utils'
@@ -56,13 +55,6 @@ export default function App() {
 				</ComponentContainer>
 				<ComponentContainer onOpenPreview={onOpenPreview} title='<Planets />'>
 					<Planets />
-				</ComponentContainer>
-				<ComponentContainer
-					onOpenPreview={(title, content) => onOpenPreview(title, content, 200)}
-					title='<City />'
-					wip
-				>
-					<City />
 				</ComponentContainer>
 			</div>
 			<Modal

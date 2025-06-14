@@ -93,7 +93,7 @@ export function Balls({
 					height: h,
 					wireframes: false,
 					background: 'transparent',
-					pixelRatio: window.devicePixelRatio || 1,
+					pixelRatio: window.devicePixelRatio,
 				},
 			})
 			renderRef.current = render

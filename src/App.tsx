@@ -1,13 +1,9 @@
-import {
-	CloseOutlined,
-	ExpandOutlined,
-	InfoCircleOutlined,
-	ReloadOutlined,
-} from '@ant-design/icons'
-import { Button, ColorPicker, Modal, Popover } from 'antd'
+import { CloseOutlined, ReloadOutlined } from '@ant-design/icons'
+import { Button, ColorPicker, Modal } from 'antd'
 import { useState } from 'react'
-import { ErrorBoundary, type FallbackProps } from 'react-error-boundary'
+import { ComponentContainer } from './Container'
 import { Balls } from './components/Balls'
+import { City } from './components/City'
 import { Light } from './components/Light'
 import { Planets } from './components/Planets'
 import { randomId } from './lib/utils'
@@ -22,14 +18,19 @@ export default function App() {
 		setModalTitle('')
 		setModalContent(null)
 	}
-	const onOpenPreview = (title: string, content: React.ReactNode) => {
+	const onOpenPreview = (
+		title: string,
+		content: React.ReactNode,
+		renderDelay = 0,
+	) => {
 		setModalTitle(title)
-		setModalContent(content)
+		setModalContentKey(randomId())
 		setIsModalOpen(true)
 		setTimeout(() => {
-			setModalContentKey(randomId())
-		}, 0)
+			setModalContent(content)
+		}, renderDelay)
 	}
+
 	const [titleColor, setTitleColor] = useState('#000000')
 
 	return (
@@ -55,6 +56,13 @@ export default function App() {
 				</ComponentContainer>
 				<ComponentContainer onOpenPreview={onOpenPreview} title='<Planets />'>
 					<Planets />
+				</ComponentContainer>
+				<ComponentContainer
+					onOpenPreview={(title, content) => onOpenPreview(title, content, 200)}
+					title='<City />'
+					wip
+				>
+					<City />
 				</ComponentContainer>
 			</div>
 			<Modal
@@ -87,57 +95,6 @@ export default function App() {
 					{modalContent}
 				</div>
 			</Modal>
-		</div>
-	)
-}
-
-function ComponentContainer({
-	children,
-	onOpenPreview,
-	title,
-}: {
-	children: React.ReactNode
-	onOpenPreview: (title: string, content: React.ReactNode) => void
-	title: string
-}) {
-	const [key, setKey] = useState(randomId())
-	return (
-		<div className='w-full h-[300px] border overflow-hidden border-gray-600'>
-			<div className='w-full h-[40px]'>
-				<div className='flex items-center justify-between pl-3 pr-2 h-full border-b border-gray-600'>
-					<span className='font-semibold'>{title}</span>
-					<div>
-						<Button
-							type='text'
-							icon={<ReloadOutlined />}
-							onClick={() => setKey(randomId())}
-						/>
-						<Button
-							type='text'
-							icon={<ExpandOutlined />}
-							onClick={() => onOpenPreview(title, children)}
-						/>
-					</div>
-				</div>
-			</div>
-			<div key={key} className='w-full h-[calc(100%-40px)] relative'>
-				<ErrorBoundary FallbackComponent={ErrorFallback}>
-					{children}
-				</ErrorBoundary>
-			</div>
-		</div>
-	)
-}
-
-function ErrorFallback({ error }: FallbackProps) {
-	return (
-		<div className='w-full h-full flex items-center justify-center'>
-			<Popover
-				content={error instanceof Error ? error.message : String(error)}
-				trigger={['hover', 'click']}
-			>
-				<Button type='text' icon={<InfoCircleOutlined />} size='large' danger />
-			</Popover>
 		</div>
 	)
 }

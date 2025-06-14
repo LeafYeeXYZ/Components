@@ -59,13 +59,10 @@ export function Planets({
 			if (!containerRef.current) {
 				return
 			}
-			canvas.resize(
-				containerRef.current.clientWidth,
-				containerRef.current.clientHeight,
-			)
-			canvas.destroyChildren()
 			const w = containerRef.current.clientWidth
 			const h = containerRef.current.clientHeight
+			canvas.resize(w, h)
+			canvas.destroyChildren()
 			const min = Math.min(w, h)
 			const centerX = w / 2
 			const centerY = h / 2

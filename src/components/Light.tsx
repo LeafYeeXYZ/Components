@@ -40,13 +40,10 @@ export function Light({
 			if (!containerRef.current) {
 				return
 			}
-			canvas.resize(
-				containerRef.current.clientWidth,
-				containerRef.current.clientHeight,
-			)
-			canvas.destroyChildren()
 			const w = containerRef.current.clientWidth
 			const h = containerRef.current.clientHeight
+			canvas.resize(w, h)
+			canvas.destroyChildren()
 			const items: Rect[] = []
 			const widthStep = (w - w * minShapeWidth) / (shapeCount - 1) / 2
 			const heightStep = (h - h * minShapeHeight) / (shapeCount - 1) / 2

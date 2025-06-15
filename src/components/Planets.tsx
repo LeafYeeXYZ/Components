@@ -123,9 +123,10 @@ export function Planets({
 						? subPlanetOrbitSpeed(i)
 						: subPlanetOrbitSpeed
 				canvas.addEventListener(CanvasEvent.AFTER_RENDER, () => {
-					const elapsed = (Date.now() - timer) / 1000
-					timer = Date.now()
-					if (elapsed > 1000) {
+					const now = Date.now()
+					const elapsed = (now - timer) / 1000
+					timer = now
+					if (elapsed > 1) {
 						return
 					}
 					const angleToRotate = (speed * elapsed) % 360

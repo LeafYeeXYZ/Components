@@ -57,7 +57,10 @@ export default function App() {
 				<ComponentContainer onOpenPreview={onOpenPreview} title='<Planets />'>
 					<Planets />
 				</ComponentContainer>
-				<ComponentContainer onOpenPreview={onOpenPreview} title='<Waves />' wip>
+				<ComponentContainer
+					onOpenPreview={onOpenPreview}
+					title='<Waves /> (In Progress)'
+				>
 					<Waves />
 				</ComponentContainer>
 			</div>

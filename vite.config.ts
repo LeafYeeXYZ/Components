@@ -20,7 +20,6 @@ export default defineConfig({
 				manualChunks: {
 					antd: ['antd', '@ant-design/icons'],
 					antv: ['@antv/g', '@antv/g-canvas'],
-					three: ['@react-three/fiber'],
 				},
 			},
 		},

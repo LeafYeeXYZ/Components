@@ -5,6 +5,7 @@ import { ComponentContainer } from './Container'
 import { Balls } from './components/Balls'
 import { Light } from './components/Light'
 import { Planets } from './components/Planets'
+import { Waves } from './components/Waves'
 import { randomId } from './lib/utils'
 
 export default function App() {
@@ -55,6 +56,9 @@ export default function App() {
 				</ComponentContainer>
 				<ComponentContainer onOpenPreview={onOpenPreview} title='<Planets />'>
 					<Planets />
+				</ComponentContainer>
+				<ComponentContainer onOpenPreview={onOpenPreview} title='<Waves />' wip>
+					<Waves />
 				</ComponentContainer>
 			</div>
 			<Modal

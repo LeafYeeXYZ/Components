@@ -149,6 +149,7 @@ export function Planets({
 		window.addEventListener('resize', debouncedDraw)
 		return () => {
 			window.removeEventListener('resize', debouncedDraw)
+			canvas.removeAllEventListeners()
 			canvas.destroy()
 		}
 	}, [

@@ -124,6 +124,9 @@ export function Waves({
 					const change = (newOffset - offset) * ((waveLayers - i) / waveLayers)
 					wave.translateLocal(0, change)
 					offset = newOffset
+					// TODO: 根据时间等条件定时改变海浪的曲线形状
+					// TODO: 优化沙滩的显示效果
+					// TODO: 为浪花增加粒子特效
 				})
 			}
 			canvas.ready.then(() => {
@@ -138,6 +141,7 @@ export function Waves({
 		window.addEventListener('resize', debouncedDraw)
 		return () => {
 			window.removeEventListener('resize', debouncedDraw)
+			canvas.removeAllEventListeners()
 			canvas.destroy()
 		}
 	}, [

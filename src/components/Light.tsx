@@ -75,6 +75,7 @@ export function Light({
 		window.addEventListener('resize', debouncedDraw)
 		return () => {
 			window.removeEventListener('resize', debouncedDraw)
+			canvas.removeAllEventListeners()
 			canvas.destroy()
 		}
 	}, [shapeColor, shapeCount, shapeOpacity, minShapeWidth, minShapeHeight])

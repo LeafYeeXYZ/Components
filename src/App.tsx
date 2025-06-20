@@ -3,6 +3,7 @@ import { Button, ColorPicker, Modal } from 'antd'
 import { useState } from 'react'
 import { ComponentContainer } from './Container'
 import { Balls } from './components/Balls'
+import { Life } from './components/Life'
 import { Light } from './components/Light'
 import { Planets } from './components/Planets'
 import { Waves } from './components/Waves'
@@ -62,6 +63,9 @@ export default function App() {
 					title='<Waves /> (In Progress)'
 				>
 					<Waves />
+				</ComponentContainer>
+				<ComponentContainer onOpenPreview={onOpenPreview} title='<Life />'>
+					<Life gridBorder={false} />
 				</ComponentContainer>
 			</div>
 			<Modal

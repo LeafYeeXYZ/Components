@@ -1,13 +1,14 @@
 import { CloseOutlined, ReloadOutlined } from '@ant-design/icons'
 import { Button, ColorPicker, Modal } from 'antd'
 import { useState } from 'react'
+import { Life } from './antv-g/Life'
+import { Light } from './antv-g/Light'
+import { Planets } from './antv-g/Planets'
+import { Waves as WavesPlain } from './antv-g/Waves'
 import { ComponentContainer } from './Container'
-import { Balls } from './components/Balls'
-import { Life } from './components/Life'
-import { Light } from './components/Light'
-import { Planets } from './components/Planets'
-import { Waves } from './components/Waves'
 import { randomId } from './lib/utils'
+import { Balls } from './matter-js/Balls'
+import { Waves as WavesParticle } from './matter-js/Waves'
 
 export default function App() {
 	const [isModalOpen, setIsModalOpen] = useState(false)
@@ -49,23 +50,49 @@ export default function App() {
 				/>
 			</div>
 			<div className='w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 px-6 md:px-12'>
-				<ComponentContainer onOpenPreview={onOpenPreview} title='<Light />'>
+				<ComponentContainer
+					onOpenPreview={onOpenPreview}
+					title='<Light />'
+					tags={['@antv/g']}
+				>
 					<Light />
 				</ComponentContainer>
-				<ComponentContainer onOpenPreview={onOpenPreview} title='<Balls />'>
+				<ComponentContainer
+					onOpenPreview={onOpenPreview}
+					title='<Balls />'
+					tags={['matter-js']}
+				>
 					<Balls />
 				</ComponentContainer>
-				<ComponentContainer onOpenPreview={onOpenPreview} title='<Planets />'>
+				<ComponentContainer
+					onOpenPreview={onOpenPreview}
+					title='<Planets />'
+					tags={['@antv/g']}
+				>
 					<Planets />
 				</ComponentContainer>
 				<ComponentContainer
 					onOpenPreview={onOpenPreview}
-					title='<Waves /> (In Progress)'
+					title='<Waves />'
+					tags={['@antv/g']}
+					wip
 				>
-					<Waves />
+					<WavesPlain />
 				</ComponentContainer>
-				<ComponentContainer onOpenPreview={onOpenPreview} title='<Life />'>
+				<ComponentContainer
+					onOpenPreview={onOpenPreview}
+					title='<Life />'
+					tags={['@antv/g']}
+				>
 					<Life gridBorder={false} />
+				</ComponentContainer>
+				<ComponentContainer
+					onOpenPreview={onOpenPreview}
+					title='<Waves />'
+					tags={['matter-js']}
+					wip
+				>
+					<WavesParticle />
 				</ComponentContainer>
 			</div>
 			<Modal

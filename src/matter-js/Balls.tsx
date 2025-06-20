@@ -24,7 +24,7 @@ type BallsProps = {
 	maxInitialPositionY?: number
 	/** max iterations for trying to position a ball, default: 100 */
 	maxIterationsForPositioning?: number
-	/** minimum distance from the walls, default: 15 */
+	/** minimum distance from the walls, default: 8 */
 	safeZone?: number
 	/** style options of balls */
 	ballsStyleOptions?: (ballIndex: number) => IBodyRenderOptions
@@ -38,7 +38,7 @@ export function Balls({
 	ballsAirFriction = 0.01,
 	maxInitialPositionY = 0.6,
 	maxIterationsForPositioning = 100,
-	safeZone = 15,
+	safeZone = 8,
 	ballsStyleOptions = () => ({
 		fillStyle: randomRed(),
 		opacity: 0.8 - (Math.random() - 0.5) * 0.2,
@@ -98,19 +98,19 @@ export function Balls({
 			})
 			renderRef.current = render
 
-			const ground = Bodies.rectangle(w / 2, h, w, safeZone, {
+			const ground = Bodies.rectangle(w / 2, h, w, safeZone * 2, {
 				isStatic: true,
 				render: { fillStyle: 'transparant' },
 			})
-			const leftWall = Bodies.rectangle(0, h / 2, safeZone, h, {
+			const leftWall = Bodies.rectangle(0, h / 2, safeZone * 2, h, {
 				isStatic: true,
 				render: { fillStyle: 'transparent' },
 			})
-			const rightWall = Bodies.rectangle(w, h / 2, safeZone, h, {
+			const rightWall = Bodies.rectangle(w, h / 2, safeZone * 2, h, {
 				isStatic: true,
 				render: { fillStyle: 'transparent' },
 			})
-			const ceiling = Bodies.rectangle(w / 2, 0, w, safeZone, {
+			const ceiling = Bodies.rectangle(w / 2, 0, w, safeZone * 2, {
 				isStatic: true,
 				render: { fillStyle: 'transparent' },
 			})

@@ -166,6 +166,7 @@ function generateGrid({
 
 type GenerateCellsParams = {
 	cells: boolean[][]
+	gridLineWidth: number
 	worldWidth: number
 	worldHeight: number
 	cellWidth: number
@@ -176,6 +177,7 @@ type GenerateCellsParams = {
 
 function generateCells({
 	cells,
+	gridLineWidth,
 	worldWidth,
 	worldHeight,
 	cellWidth,
@@ -189,10 +191,10 @@ function generateCells({
 			const isAlive = cells[y][x]
 			const rect = new Rect({
 				style: {
-					x: x * cellWidth,
-					y: y * cellHeight,
-					width: cellWidth,
-					height: cellHeight,
+					x: x * cellWidth + gridLineWidth + 1,
+					y: y * cellHeight + gridLineWidth + 1,
+					width: cellWidth - gridLineWidth * 2 - 2,
+					height: cellHeight - gridLineWidth * 2 - 2,
 					fill: isAlive ? cellAliveColor : cellDeadColor,
 				},
 			})
@@ -234,26 +236,30 @@ export function Life({
 	cellDeadColor = 'rgb(255,255,255)',
 }: LifeProps) {
 	const containerRef = useRef<HTMLDivElement>(null)
+	const canvasRef = useRef<Canvas | null>(null)
 	useEffect(() => {
 		if (!containerRef.current) {
 			return
 		}
 
-		const canvas = new Canvas({
-			container: containerRef.current,
-			renderer,
-			width: 0,
-			height: 0,
-		})
-
 		const draw = () => {
 			if (!containerRef.current) {
 				return
 			}
+			if (canvasRef.current) {
+				canvasRef.current.destroy()
+			}
+			const canvas = new Canvas({
+				container: containerRef.current,
+				renderer,
+				width: 0,
+				height: 0,
+			})
+			canvasRef.current = canvas
 			const w = containerRef.current.clientWidth
 			const h = containerRef.current.clientHeight
 			canvas.resize(w, h)
-			canvas.destroyChildren()
+
 			const worldWidth = width || Math.floor(w / 50)
 			const worldHeight = height || Math.floor(h / 50)
 			const world = new World(worldWidth, worldHeight, initialCells || 'random')
@@ -275,6 +281,7 @@ export function Life({
 				: null
 			let cells = generateCells({
 				cells: world.cells,
+				gridLineWidth,
 				worldWidth,
 				worldHeight,
 				cellWidth,
@@ -292,6 +299,7 @@ export function Life({
 					canvas.removeChild(cells)
 					cells = generateCells({
 						cells: world.cells,
+						gridLineWidth,
 						worldWidth,
 						worldHeight,
 						cellWidth,
@@ -316,8 +324,10 @@ export function Life({
 		window.addEventListener('resize', debouncedDraw)
 		return () => {
 			window.removeEventListener('resize', debouncedDraw)
-			canvas.removeAllEventListeners()
-			canvas.destroy()
+			if (canvasRef.current) {
+				canvasRef.current.destroy()
+				canvasRef.current = null
+			}
 		}
 	}, [
 		width,

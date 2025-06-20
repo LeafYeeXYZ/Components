@@ -43,26 +43,30 @@ export function Planets({
 	subPlanetOrbitLineDash = [2, 2],
 }: PlanetsProps) {
 	const containerRef = useRef<HTMLDivElement>(null)
+	const canvasRef = useRef<Canvas | null>(null)
 	useEffect(() => {
 		if (!containerRef.current) {
 			return
 		}
 
-		const canvas = new Canvas({
-			container: containerRef.current,
-			renderer,
-			width: 0,
-			height: 0,
-		})
-
 		const draw = () => {
 			if (!containerRef.current) {
 				return
 			}
+			if (canvasRef.current) {
+				canvasRef.current.destroy()
+			}
+			const canvas = new Canvas({
+				container: containerRef.current,
+				renderer,
+				width: 0,
+				height: 0,
+			})
+			canvasRef.current = canvas
 			const w = containerRef.current.clientWidth
 			const h = containerRef.current.clientHeight
 			canvas.resize(w, h)
-			canvas.destroyChildren()
+
 			const min = Math.min(w, h)
 			const centerX = w / 2
 			const centerY = h / 2
@@ -149,8 +153,10 @@ export function Planets({
 		window.addEventListener('resize', debouncedDraw)
 		return () => {
 			window.removeEventListener('resize', debouncedDraw)
-			canvas.removeAllEventListeners()
-			canvas.destroy()
+			if (canvasRef.current) {
+				canvasRef.current.destroy()
+				canvasRef.current = null
+			}
 		}
 	}, [
 		centerPlanetRadius,
